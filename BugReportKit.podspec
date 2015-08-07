@@ -10,7 +10,7 @@
 Pod::Spec.new do |s|
     s.name             = 'BugReportKit'
     s.version          = '0.1.0'
-    s.summary          = 'Easier bug reports on iOS. Just take a screenshot in your app, doodle on the image, and send it away! Currently, Bug reports can be added to Github Issues, JIRA issues, or sent as emails.'
+    s.summary          = 'Easier bug reports on iOS.'
     s.description      = <<-DESC
                        Easier bug reports on iOS. Just take a screenshot in your app, doodle on the image, and send it away! Currently, Bug reports can be added to Github Issues, JIRA issues, or sent as emails.
 
