@@ -10,15 +10,14 @@
 Pod::Spec.new do |s|
     s.name             = 'BugReportKit'
     s.version          = '0.1.0'
-    s.summary          = 'A short description of BugReportKit.'
+    s.summary          = 'Easier bug reports on iOS. Just take a screenshot in your app, doodle on the image, and send it away! Currently, Bug reports can be added to Github Issues, JIRA issues, or sent as emails.'
     s.description      = <<-DESC
-                       An optional longer description of BugReportKit
+                       Easier bug reports on iOS. Just take a screenshot in your app, doodle on the image, and send it away! Currently, Bug reports can be added to Github Issues, JIRA issues, or sent as emails.
 
-                       * Markdown format.
-                       * Don't worry about the indent, we strip it!
+                       For more details, check out the Github repo -- https://github.com/rahuljiresal/BugReportKit
                        DESC
     s.homepage         = 'https://github.com/rahuljiresal/BugReportKit'
-    # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
+    s.screenshots     = 'https://cloud.githubusercontent.com/assets/216346/9147661/06328b94-3d1f-11e5-829f-bbda3ceb9856.gif', 'https://cloud.githubusercontent.com/assets/216346/9147888/c91bfb24-3d22-11e5-9d43-151d08ae7129.png', 'https://cloud.githubusercontent.com/assets/216346/9147889/c937381c-3d22-11e5-89e7-152c18e3b6f3.png'
     s.license          = 'MIT'
     s.author           = { 'Rahul Jiresal' => 'rahul.jiresal@gmail.com' }
     s.source           = { :git => 'https://github.com/rahuljiresal/BugReportKit.git', :tag => s.version.to_s }
