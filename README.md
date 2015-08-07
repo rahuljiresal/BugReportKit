@@ -13,7 +13,7 @@ Once BugReportKit is integrated into your app, all you need to do is take a scre
 
 Here is a GIF'ed video --
 
-![BugReportKit GIF](https://cloud.githubusercontent.com/assets/216346/9147327/5396b932-3d1a-11e5-98e4-ad550478dc35.gif)
+![BugReportKit GIF](https://cloud.githubusercontent.com/assets/216346/9147661/06328b94-3d1f-11e5-829f-bbda3ceb9856.gif)
 
 To run the sample project, clone the repo, and run `pod install` from the Example directory first.
 
