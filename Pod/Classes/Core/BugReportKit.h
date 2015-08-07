@@ -10,10 +10,11 @@
 #import <UIKit/UIKit.h>
 
 #import "BRKReporterDelegate.h"
+#import "BugReportKitDelegate.h"
 
 @interface BugReportKit : NSObject
 
-+ (void)initializeWith:(id<BRKReporterDelegate>)reporter;
++ (void)initializeWithReporter:(id<BRKReporterDelegate>)reporter delegate:(id<BugReportKitDelegate>)bugReportKitDelegate;
 
 @end
 

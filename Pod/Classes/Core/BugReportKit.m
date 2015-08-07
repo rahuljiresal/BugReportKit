@@ -8,6 +8,7 @@
 
 #import "BugReportKit.h"
 #import "BRKWindow.h"
+#import "BRKViewController.h"
 
 @interface BugReportKit() <BRKWindowDelegate>
 
@@ -16,6 +17,7 @@
 
 @property (strong, nonatomic) BRKWindow* brkWindow;
 @property (strong, nonatomic) id<BRKReporterDelegate> brkReporter;
+@property (strong, nonatomic) id<BugReportKitDelegate> bugReportKitDelegate;
 
 @end
 
@@ -75,11 +77,12 @@ static bool isFirstAccess = YES;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-+ (void)initializeWith:(id<BRKReporterDelegate>)reporter {
++ (void)initializeWithReporter:(id<BRKReporterDelegate>)reporter delegate:(id<BugReportKitDelegate>)bugReportKitDelegate {
     NSAssert([reporter respondsToSelector:@selector(sendBugReportWithImage:text:completionHandler:)], @"Error: Invalid Instance of reporter.");
     
     BugReportKit* instance = [BugReportKit sharedInstance];
     instance.brkReporter = reporter;
+    instance.bugReportKitDelegate = bugReportKitDelegate;
     [[NSNotificationCenter defaultCenter] addObserver:instance selector:@selector(screenshotDetectedNotification:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
 }
 
@@ -106,6 +109,11 @@ static bool isFirstAccess = YES;
     [self.brkWindow setWindowLevel:UIWindowLevelAlert + 1000];
     [self.brkWindow setBrkWindowDelegate:self];
     [self.brkWindow setBrkReporterDelegate:self.brkReporter];
+    
+    BRKViewController *vc = [[BRKViewController alloc] initWithScreenshot:screenshot];
+    vc.parentWindow = self.brkWindow;
+    self.brkWindow.rootViewController = vc;
+
     [self.brkWindow makeKeyAndVisible];
 }
 
@@ -152,31 +160,33 @@ static bool isFirstAccess = YES;
 #pragma mark - BRKWindowDelegate
 
 - (void)bugReportSent {
-    [self.brkWindow setWindowLevel:UIWindowLevelNormal];
-    [self.brkWindow setHidden:YES];
-    self.brkWindow = nil;
-    [self.originalWindow makeKeyAndVisible];
-    
-    [[UIDevice currentDevice] setValue:self.originalOrientation forKey:@"orientation"];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenshotDetectedNotification:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
+    [self dismissBRKWindow];
+    if ([self.bugReportKitDelegate respondsToSelector:@selector(bugReportSentSuccessfully)]) {
+        [self.bugReportKitDelegate bugReportSentSuccessfully];
+    }
 }
 
 - (void)bugReportCancelled {
-    [self.brkWindow setWindowLevel:UIWindowLevelNormal];
-    [self.brkWindow setHidden:YES];
-    self.brkWindow = nil;
-    [self.originalWindow makeKeyAndVisible];
-    
-    [[UIDevice currentDevice] setValue:self.originalOrientation forKey:@"orientation"];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenshotDetectedNotification:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
+    [self dismissBRKWindow];
+    if ([self.bugReportKitDelegate respondsToSelector:@selector(bugReportCancelled)]) {
+        [self.bugReportKitDelegate bugReportCancelled];
+    }
 }
 
 - (void)bugReportFailedToSend {
+    [self dismissBRKWindow];
+    if ([self.bugReportKitDelegate respondsToSelector:@selector(bugReportFailedToSend)]) {
+        [self.bugReportKitDelegate bugReportFailedToSend];
+    }
+}
+
+- (void)dismissBRKWindow {
     [self.brkWindow setWindowLevel:UIWindowLevelNormal];
     [self.brkWindow setHidden:YES];
+    self.brkWindow.rootViewController = nil;
     self.brkWindow = nil;
     [self.originalWindow makeKeyAndVisible];
-    
+
     [[UIDevice currentDevice] setValue:self.originalOrientation forKey:@"orientation"];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenshotDetectedNotification:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
 }

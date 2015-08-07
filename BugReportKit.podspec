@@ -35,7 +35,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'Core' do |cr|
         cr.source_files = 'Pod/Classes/Core/**/*'
-        cr.public_header_files = 'Pod/Core/BugReportKit.h', 'Pod/Core/BRKImageUploaderDelegate.h', 'Pod/Core/BRKReporterDelegate.h'
+        cr.public_header_files = 'Pod/Core/BRK.h'
         cr.frameworks = 'UIKit'
     end        
 
