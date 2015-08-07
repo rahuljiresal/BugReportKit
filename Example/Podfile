@@ -1,0 +1,16 @@
+source 'https://github.com/CocoaPods/Specs.git'
+# use_frameworks!
+
+target 'BugReportKit_Example', :exclusive => true do
+  pod "BugReportKit", :path => "../"
+  pod "BugReportKit/EmailReporter", :path => "../"
+  pod "BugReportKit/GithubReporter", :path => "../"
+  pod "BugReportKit/JIRAReporter", :path => "../"
+end
+
+target 'BugReportKit_Tests', :exclusive => true do
+  pod "BugReportKit", :path => "../"
+  pod "BugReportKit/EmailReporter", :path => "../"
+  pod "BugReportKit/GithubReporter", :path => "../"
+  pod "BugReportKit/JIRAReporter", :path => "../"
+end
