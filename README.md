@@ -9,7 +9,7 @@
 
 We've always wanted bug reports to be easy. Our users should not have to jump through hoops to tell us what happened on the app. BugReportKit is an attempt to do that.
 
-Once BugReportKit is integrated into your app, all you need to do is take a screenshot, point to the bug on the screen by doodling on it, write a small description, and send it away! BugReportKit currently allows you to send bug reports as Github Issues, JIRA Issues, or Emails.
+Once BugReportKit is integrated into your app, all you need to do is take a screenshot, point to the bug on the screen by doodling on it, write a small description, and send it away! BugReportKit currently allows you to send bug reports as Github Issues, JIRA Issues, Gitlab Issues, or Emails.
 
 Here is a GIF'ed video --
 
