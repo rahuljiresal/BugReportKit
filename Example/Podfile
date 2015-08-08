@@ -5,6 +5,7 @@ target 'BugReportKit_Example', :exclusive => true do
   pod "BugReportKit", :path => "../"
   pod "BugReportKit/EmailReporter", :path => "../"
   pod "BugReportKit/GithubReporter", :path => "../"
+  pod "BugReportKit/GitlabReporter", :path => "../"
   pod "BugReportKit/JIRAReporter", :path => "../"
 end
 
@@ -12,5 +13,6 @@ target 'BugReportKit_Tests', :exclusive => true do
   pod "BugReportKit", :path => "../"
   pod "BugReportKit/EmailReporter", :path => "../"
   pod "BugReportKit/GithubReporter", :path => "../"
+  pod "BugReportKit/GitlabReporter", :path => "../"
   pod "BugReportKit/JIRAReporter", :path => "../"
 end

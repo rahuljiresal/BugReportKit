@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
     s.name             = 'BugReportKit'
-    s.version          = '0.1.0'
+    s.version          = '0.1.1'
     s.summary          = 'Easier bug reports on iOS.'
     s.description      = <<-DESC
                        Easier bug reports on iOS. Just take a screenshot in your app, doodle on the image, and send it away! Currently, Bug reports can be added to Github Issues, JIRA issues, or sent as emails.
@@ -55,6 +55,13 @@ Pod::Spec.new do |s|
     s.subspec 'GithubReporter' do |er|
         er.source_files = 'Pod/Classes/Reporters/Github/**/*'
         er.public_header_files = 'Pod/Reporters/Github/BRKGithubReporter.h'
+        er.dependency 'BugReportKit/Core'
+        er.dependency 'BugReportKit/S3ImageUploader'
+    end
+
+    s.subspec 'GitlabReporter' do |er|
+        er.source_files = 'Pod/Classes/Reporters/Gitlab/**/*'
+        er.public_header_files = 'Pod/Reporters/Gitlab/BRKGithubReporter.h'
         er.dependency 'BugReportKit/Core'
         er.dependency 'BugReportKit/S3ImageUploader'
     end

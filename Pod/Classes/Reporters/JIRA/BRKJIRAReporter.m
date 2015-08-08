@@ -42,7 +42,6 @@
     
     [self.imageUploader uploadImage:image completionHandler:^(NSString *absoluteUrl, NSError *error) {
         if (error) {
-            NSLog(@"Error: %@", error.localizedDescription);
             handler(error);
             return ;
         }
@@ -87,9 +86,7 @@
             NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
             NSURLSession* session = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
             
-            NSLog(@"%@", request);
             NSURLSessionTask* task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                NSLog(@"%@", response);
                 handler(error);
                 
             }];

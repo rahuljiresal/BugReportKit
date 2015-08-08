@@ -92,6 +92,38 @@ Then, in your `AppDelegate`,
 }
 ```
 
+### Send Bug Reports to Gitlab Issues
+
+You need these additional sub-pod for Gitlab.
+```ruby
+pod "BugReportKit"
+pod "BugReportKit/GitlabReporter"
+```
+Then, in your `AppDelegate`, 
+```objective-c
+#import <BRK.h>
+#import <BugReportKit/BRKGitlabReporter.h>
+#import <BugReportKit/BRKS3ImageUploader.h>
+```
+```objective-c
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    BRKS3ImageUploader* uploader = [[BRKS3ImageUploader alloc] initWithS3AccessKey:S3_ACCESSKEY
+                                                                         secretKey:S3_SECRETKEY
+                                                                        bucketName:S3_BUCKET];
+    BRKGitlabReporter* reporter = [[BRKGitlabReporter alloc] initWithGitlabUsername:GITLAB_USERNAME
+                                                                           password:GITLAB_PASSWORD
+                                                                         repository:GITLAB_REPO
+                                                                              owner:GITLAB_OWNER
+                                                                      imageUploader:uploader];
+    
+    [BugReportKit initializeWithReporter:reporter delegate:self];
+    
+    return YES;
+}
+```
+
+
 ### Send Bug Reports via Email
 
 *Note: The dependency used by the Email sub-pod has a huge static library (100+ MB). I would not recommend using emails to report bugs unless you don't have any other options.*

@@ -42,7 +42,6 @@
     
     [self.imageUploader uploadImage:image completionHandler:^(NSString *absoluteUrl, NSError *error) {
         if (error) {
-            NSLog(@"Error: %@", error.localizedDescription);
             handler(error);
             return ;
         }
@@ -53,7 +52,7 @@
         [request setHTTPMethod:@"POST"];
         
         NSString* titleText = [text substringToIndex:MIN(text.length, 10)];
-        NSString* bodyText = [NSString stringWithFormat:@"%@\n\n\n![Attached Screenshot](%@)", text, absoluteUrl];
+        NSString* bodyText = [NSString stringWithFormat:@"%@\n\n\nPlease see attached screenshot --!\n\n![Attached Screenshot](%@)", text, absoluteUrl];
         NSDictionary *bodyDict = @{
                                    @"title"     : [NSString stringWithFormat:@"BugReportKit Issue: %@...",  titleText],
                                    @"body"      : bodyText,
