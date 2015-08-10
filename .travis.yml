@@ -10,8 +10,8 @@ language: objective-c
 # - pod install --project-directory=Example
 env:
   global:
-    - REPO="Example"
-    - CI_HOME=`pwd`/$REPO
+    - EXAMPLE="Example"
+    - CI_HOME=$TRAVIS_BUILD_DIR/$EXAMPLE
 install:
 #- gem install xcpretty --no-rdoc --no-ri --no-document --quiet
 - brew install xctool
