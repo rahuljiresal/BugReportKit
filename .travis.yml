@@ -12,5 +12,5 @@ install:
 #- gem install xcpretty --no-rdoc --no-ri --no-document --quiet
 - brew install xctool
 script:
-- set -o pipefail && xctool test -workspace Example/BugReportKit.xcworkspace -scheme BugReportKit_Tests -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+- set -o pipefail && xctool clean test -workspace Example/BugReportKit.xcworkspace -scheme BugReportKit_Tests -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
 - pod lib lint --quick

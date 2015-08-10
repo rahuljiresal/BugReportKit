@@ -9,10 +9,10 @@
 
 Pod::Spec.new do |s|
     s.name             = 'BugReportKit'
-    s.version          = '0.1.1'
+    s.version          = '0.1.2'
     s.summary          = 'Easier bug reports on iOS.'
     s.description      = <<-DESC
-                       Easier bug reports on iOS. Just take a screenshot in your app, doodle on the image, and send it away! Currently, Bug reports can be added to Github Issues, JIRA issues, Gitlab Issues, or sent as emails.
+                       Easier bug reports on iOS. Just take a screenshot in your app, doodle on the image, and send it away! The report will also include device metadata. Currently, Bug reports can be added to Github Issues, JIRA issues, Gitlab Issues, or sent as emails.
 
                        For more details, check out the Github repo -- https://github.com/rahuljiresal/BugReportKit
                        DESC
@@ -35,6 +35,7 @@ Pod::Spec.new do |s|
     s.subspec 'Core' do |cr|
         cr.source_files = 'Pod/Classes/Core/**/*'
         cr.public_header_files = 'Pod/Core/BRK.h'
+        cr.dependency 'GBDeviceInfo'
         cr.frameworks = 'UIKit'
     end        
 

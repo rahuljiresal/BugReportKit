@@ -14,6 +14,6 @@
 
 @property (strong, nonatomic) BRKWindow* parentWindow;
 
-- (id)initWithScreenshot:(UIImage*)screenshot;
+- (id)initWithScreenshot:(UIImage*)screenshot metaInfo:(NSString*)meta;
 
 @end

@@ -33,6 +33,7 @@
 @property (strong, nonatomic) UIPlaceholderTextView* textView;
 
 @property (strong, nonatomic) UIImage* screenshot;
+@property (strong, nonatomic) NSString* metaInfo;
 
 @property (strong, nonatomic) BRKDrawView* imageview;
 @property (strong, nonatomic) NSDictionary* colorsDictionary;
@@ -43,10 +44,11 @@
 
 @implementation BRKViewController
 
-- (id)initWithScreenshot:(UIImage *)screenshot {
+- (id)initWithScreenshot:(UIImage *)screenshot metaInfo:(NSString*)meta {
     self = [self init];
     if (self) {
         self.screenshot = screenshot;
+        self.metaInfo = meta;
     }
     return self;
 }
@@ -205,7 +207,7 @@
         [self.textView resignFirstResponder];
         if ([self.parentWindow.brkReporterDelegate respondsToSelector:@selector(sendBugReportWithImage:text:completionHandler:)]) {
             [BRKLoadingView show];
-            [self.parentWindow.brkReporterDelegate sendBugReportWithImage:self.imageview.image text:self.textView.text completionHandler:^(NSError *error) {
+            [self.parentWindow.brkReporterDelegate sendBugReportWithImage:self.imageview.image text:[self.textView.text stringByAppendingString:self.metaInfo] completionHandler:^(NSError *error) {
                 [BRKLoadingView dismiss];
                 if (error) {
                     [self showAlertWithTitle:NSLocalizedString(@"Error", nil) message:error.localizedDescription handler:^(UIAlertAction *action) {

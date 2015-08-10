@@ -9,6 +9,29 @@
 #import "BugReportKit.h"
 #import "BRKWindow.h"
 #import "BRKViewController.h"
+#import "mach/mach.h"
+
+
+#import <GBDeviceInfo/GBDeviceInfo.h>
+
+vm_size_t usedMemory(void) {
+    struct task_basic_info info;
+    mach_msg_type_number_t size = sizeof(info);
+    kern_return_t kerr = task_info(mach_task_self(), TASK_BASIC_INFO, (task_info_t)&info, &size);
+    return (kerr == KERN_SUCCESS) ? info.resident_size : 0; // size in bytes
+}
+
+vm_size_t freeMemory(void) {
+    mach_port_t host_port = mach_host_self();
+    mach_msg_type_number_t host_size = sizeof(vm_statistics_data_t) / sizeof(integer_t);
+    vm_size_t pagesize;
+    vm_statistics_data_t vm_stat;
+    
+    host_page_size(host_port, &pagesize);
+    (void) host_statistics(host_port, HOST_VM_INFO, (host_info_t)&vm_stat, &host_size);
+    return vm_stat.free_count * pagesize;
+}
+
 
 @interface BugReportKit() <BRKWindowDelegate>
 
@@ -103,19 +126,73 @@ static bool isFirstAccess = YES;
         }
     }
     if (!self.brkWindow) {
-        self.brkWindow = [[BRKWindow alloc] initWithScreenshot:screenshot];
+        self.brkWindow = [[BRKWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     }
 
     [self.brkWindow setWindowLevel:UIWindowLevelAlert + 1000];
     [self.brkWindow setBrkWindowDelegate:self];
     [self.brkWindow setBrkReporterDelegate:self.brkReporter];
     
-    BRKViewController *vc = [[BRKViewController alloc] initWithScreenshot:screenshot];
+    BRKViewController *vc = [[BRKViewController alloc] initWithScreenshot:screenshot metaInfo:[self populateMetaInfo]];
     vc.parentWindow = self.brkWindow;
     self.brkWindow.rootViewController = vc;
 
     [self.brkWindow makeKeyAndVisible];
 }
+
+- (NSString*)populateMetaInfo {
+    NSMutableString* meta = [NSMutableString stringWithFormat:@"\n\n\n============= %@ =============\n\n", NSLocalizedString(@"Device Metadata", nil)];
+    
+    [meta appendString:[NSString stringWithFormat:@"%@: %@\n", NSLocalizedString(@"Device", nil), [GBDeviceInfo deviceInfo].modelString]];
+    [meta appendString:[NSString stringWithFormat:@"%@: %@\n", NSLocalizedString(@"iOS Version", nil), [NSString stringWithFormat:@"%lu.%lu.%lu", (unsigned long)[GBDeviceInfo deviceInfo].osVersion.major, (unsigned long)[GBDeviceInfo deviceInfo].osVersion.minor, (unsigned long)[GBDeviceInfo deviceInfo].osVersion.patch]]];
+    [meta appendString:[NSString stringWithFormat:@"%@: %@\n", NSLocalizedString(@"Jailbroken", nil), [GBDeviceInfo deviceInfo].isJailbroken ? NSLocalizedString(@"Yes", nil) : NSLocalizedString(@"No", nil)]];
+    [meta appendString:[NSString stringWithFormat:@"%@: %@\n", NSLocalizedString(@"Memory", nil), [NSString stringWithFormat:@"%5.1f MB Used (App), %5.1f MB Free (App), %5.1f GB Total (System)", usedMemory()/1000000.0f, freeMemory()/1000000.0f, [GBDeviceInfo deviceInfo].physicalMemory]]];
+    
+    uint64_t totalSpace = 0;
+    uint64_t totalFreeSpace = 0;
+    NSError *error = nil;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:[paths lastObject] error: &error];
+
+    if (dictionary) {
+        NSNumber *fileSystemSizeInBytes = [dictionary objectForKey: NSFileSystemSize];
+        NSNumber *freeFileSystemSizeInBytes = [dictionary objectForKey:NSFileSystemFreeSize];
+        totalSpace = [fileSystemSizeInBytes unsignedLongLongValue];
+        totalFreeSpace = [freeFileSystemSizeInBytes unsignedLongLongValue];
+        [meta appendString:[NSString stringWithFormat:@"%@: %@\n", NSLocalizedString(@"Disk Space", nil), [NSString stringWithFormat:@"%llu MB Free, %llu MB Total", ((totalFreeSpace/1024ll)/1024ll), ((totalSpace/1024ll)/1024ll)]]];
+    }
+    
+    UIDevice *device = [UIDevice currentDevice];
+    [device setBatteryMonitoringEnabled:YES];
+    float batLeft = [device batteryLevel];
+    int batinfo = (batLeft * 100);
+    NSString* batteryStatus;
+    switch ([device batteryState]) {
+        case UIDeviceBatteryStateUnplugged: {
+            batteryStatus = NSLocalizedString(@"Unplugged", nil);
+            break;
+        }
+        case UIDeviceBatteryStateCharging: {
+            batteryStatus = NSLocalizedString(@"Charging", nil);
+            break;
+        }
+        case UIDeviceBatteryStateFull: {
+            batteryStatus = NSLocalizedString(@"Full", nil);
+            break;
+        }
+        default: {
+            batteryStatus = NSLocalizedString(@"Unknown", nil);
+            break;
+        }
+    }
+
+    [meta appendString:[NSString stringWithFormat:@"%@: %@\n", NSLocalizedString(@"Battery", nil), [NSString stringWithFormat:@"%d%% (%@)", batinfo, batteryStatus]]];
+    
+    [meta appendString:[NSString stringWithFormat:@"\n=================== %@ ===================\n", NSLocalizedString(@"-", nil)]];
+    
+    return meta;
+}
+
 
 + (UIImage *)screenshot {
     CGSize imageSize = CGSizeZero;

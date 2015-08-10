@@ -23,9 +23,9 @@
 #define EMAIL_PASSWORD @""
 #define EMAIL_TO @""
 
-#define S3_ACCESSKEY @"AKIAIGUZYIU65IQS77LA"
-#define S3_SECRETKEY @"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"
-#define S3_BUCKET @"bug-report-kit"
+#define S3_ACCESSKEY @""
+#define S3_SECRETKEY @""
+#define S3_BUCKET @""
 
 #define GITHUB_USERNAME @""
 #define GITHUB_PASSWORD @""

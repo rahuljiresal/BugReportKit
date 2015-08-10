@@ -10,11 +10,5 @@
 
 @implementation BRKWindow
 
-- (id)initWithScreenshot:(UIImage*)screenshot {
-    self = [self initWithFrame:[[UIScreen mainScreen] bounds]];
-    if (self) {
-    }
-    return self;
-}
 
 @end

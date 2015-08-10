@@ -24,6 +24,4 @@
 @property (strong, nonatomic) id<BRKWindowDelegate> brkWindowDelegate;
 @property (strong, nonatomic) id<BRKReporterDelegate> brkReporterDelegate;
 
-- (id)initWithScreenshot:(UIImage*)screenshot;
-
 @end
