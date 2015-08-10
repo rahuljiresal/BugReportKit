@@ -4,15 +4,13 @@
 
 language: objective-c
 # cache: cocoapods
-# podfile: Example/Podfile
-# before_install:
-# - gem install cocoapods # Since Travis is not always on latest version
-# - pod install --project-directory=Example
-before_install: cd Example
+podfile: Example/Podfile
+before_install:
+- gem install cocoapods -v 0.35.0 # Since Travis is not always on latest version
+- pod install --project-directory=Example
 install:
 #- gem install xcpretty --no-rdoc --no-ri --no-document --quiet
 - brew install xctool
-- pod install
 script:
-- set -o pipefail && xctool test -workspace BugReportKit.xcworkspace -scheme BugReportKit_Tests -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+- set -o pipefail && xctool test -workspace Example/BugReportKit.xcworkspace -scheme BugReportKit_Tests -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
 - pod lib lint --quick
