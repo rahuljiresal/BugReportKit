@@ -7,9 +7,9 @@
 
 ## About
 
-We've always wanted bug reports to be easy. Our users should not have to jump through hoops to tell us what happened on the app. BugReportKit is an attempt to do that.
+We've always wanted bug reports to be easy. Our users should not have to jump through hoops to tell us what happened on the app. BugReportKit is an attempt to make bug reports easy.
 
-Once BugReportKit is integrated into your app, all you need to do is take a screenshot, point to the bug on the screen by doodling on it, write a small description, and send it away! BugReportKit currently allows you to send bug reports as Github Issues, JIRA Issues, Gitlab Issues, or Emails.
+Once BugReportKit is integrated into your app (check the code examples below), all the user needs to do is take a screenshot, point to the bug on the screen by doodling on it, write a small description, and send it away! BugReportKit currently allows you to automatically send bug reports as Github Issues, JIRA Issues, Gitlab Issues, or Emails.
 
 Here is a GIF'ed video --
 
@@ -179,6 +179,10 @@ Then, in your `AppDelegate`,
 Let me know if you like the library, or have any suggestions, let me know. I plan to maintain this library regularly. Any pull requests are welcome!
 
 Rahul Jiresal, rahul.jiresal@gmail.com, [Website](http://www.rahuljiresal.com), [Twitter](https://www.twitter.com/rahuljiresal)
+
+Love this project? Did it save you some time? Wanna buy me a beer and say thanks? [![donation](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=6RJNVRPQPYZJS&lc=CA&item_name=Rahul%20Jiresal&item_number=BugReportKit&currency_code=CAD&bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted)
+
+### I'm available as a contract developer! Hire me!
 
 ## License
 
