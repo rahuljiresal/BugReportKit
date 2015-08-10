@@ -11,9 +11,9 @@ We've always wanted bug reports to be easy. Our users should not have to jump th
 
 Once BugReportKit is integrated into your app (check the [code examples below](#send-bug-reports-to-github-issues)), all the user needs to do is take a screenshot, point to the bug on the screen by doodling on it, write a small description, and send it away! BugReportKit currently allows you to automatically send bug reports as Github Issues, JIRA Issues, Gitlab Issues, or Emails.
 
-Here's an [example of an issue submitted by BugReportKit](https://github.com/rahuljiresal/BugReportKit/issues/7).
+Here's an [example of an issue submitted by BugReportKit](https://github.com/rahuljiresal/BugReportKit/issues/8).
 
-Here is a GIF'ed video --
+And here is a GIF'ed video --
 
 ![BugReportKit GIF](https://cloud.githubusercontent.com/assets/216346/9147661/06328b94-3d1f-11e5-829f-bbda3ceb9856.gif)
 
