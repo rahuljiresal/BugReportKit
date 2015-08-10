@@ -9,7 +9,9 @@ language: objective-c
 # - gem install cocoapods # Since Travis is not always on latest version
 # - pod install --project-directory=Example
 install:
-- gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+#- gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+- brew install xctool
+- pod install
 script:
-- set -o pipefail && xcodebuild test -workspace Example/BugReportKit.xcworkspace -scheme BugReportKit_Tests -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO | xcpretty -c
+- set -o pipefail && xctool test -workspace Example/BugReportKit.xcworkspace -scheme BugReportKit_Tests -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
 - pod lib lint --quick
