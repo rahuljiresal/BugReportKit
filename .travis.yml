@@ -8,10 +8,7 @@ language: objective-c
 # before_install:
 # - gem install cocoapods # Since Travis is not always on latest version
 # - pod install --project-directory=Example
-env:
-  global:
-    - EXAMPLE="Example"
-    - CI_HOME=$TRAVIS_BUILD_DIR/$EXAMPLE
+before_install: cd Example
 install:
 #- gem install xcpretty --no-rdoc --no-ri --no-document --quiet
 - brew install xctool
