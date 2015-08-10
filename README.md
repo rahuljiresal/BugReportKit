@@ -58,6 +58,7 @@ Then, in your `AppDelegate`,
                                                                       imageUploader:uploader];
     
     [BugReportKit initializeWithReporter:reporter delegate:self];
+    [BugReportKit setUniqueUserIdentifier:@"rahul.jiresal@gmail.com"]; // (optional) It can be anything that uniquely identifies your user in case you want to contact them
     
     return YES;
 }
@@ -89,6 +90,7 @@ Then, in your `AppDelegate`,
                                                                imageUploader:uploader];
     
     [BugReportKit initializeWithReporter:reporter delegate:self];
+    [BugReportKit setUniqueUserIdentifier:@"rahul.jiresal@gmail.com"]; // (optional) It can be anything that uniquely identifies your user in case you want to contact them
     
     return YES;
 }
@@ -120,6 +122,7 @@ Then, in your `AppDelegate`,
                                                                       imageUploader:uploader];
     
     [BugReportKit initializeWithReporter:reporter delegate:self];
+    [BugReportKit setUniqueUserIdentifier:@"rahul.jiresal@gmail.com"]; // (optional) It can be anything that uniquely identifies your user in case you want to contact them
     
     return YES;
 }
@@ -150,7 +153,7 @@ Then, in your `AppDelegate`,
                                                              connectionType:BRKEmailConnectionTypeClear
                                                                   toAddress:EMAIL_TO];
     
-    [BugReportKit initializeWithReporter:reporter delegate:self];
+    [BugReportKit setUniqueUserIdentifier:@"rahul.jiresal@gmail.com"]; // (optional) It can be anything that uniquely identifies your user in case you want to contact them
     
     return YES;
 }
