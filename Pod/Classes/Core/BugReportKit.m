@@ -13,6 +13,10 @@
 
 
 #import <GBDeviceInfo/GBDeviceInfo.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
+#import <SystemConfiguration/SystemConfiguration.h>
+#import <SystemConfiguration/CaptiveNetwork.h>
 
 vm_size_t usedMemory(void) {
     struct task_basic_info info;
@@ -41,6 +45,8 @@ vm_size_t freeMemory(void) {
 @property (strong, nonatomic) BRKWindow* brkWindow;
 @property (strong, nonatomic) id<BRKReporterDelegate> brkReporter;
 @property (strong, nonatomic) id<BugReportKitDelegate> bugReportKitDelegate;
+
+@property (strong, nonatomic) NSString* userIdentifier;
 
 @end
 
@@ -109,6 +115,11 @@ static bool isFirstAccess = YES;
     [[NSNotificationCenter defaultCenter] addObserver:instance selector:@selector(screenshotDetectedNotification:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
 }
 
++ (void)setUniqueUserIdentifier:(NSString*)userIdentifier {
+    BugReportKit* instance = [BugReportKit sharedInstance];
+    instance.userIdentifier = userIdentifier;
+}
+
 - (void)screenshotDetectedNotification:(id)notification {
     UIImage* screenshot = [BugReportKit screenshot];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -141,8 +152,13 @@ static bool isFirstAccess = YES;
 }
 
 - (NSString*)populateMetaInfo {
-    NSMutableString* meta = [NSMutableString stringWithFormat:@"\n\n\n============= %@ =============\n\n", NSLocalizedString(@"Device Metadata", nil)];
+    NSMutableString* meta = [NSMutableString stringWithFormat:@"\n\n\n============= %@ =============\n\n", NSLocalizedString(@"Bug Metadata", nil)];
     
+    
+    [meta appendString:[NSString stringWithFormat:@"%@: %@\n", NSLocalizedString(@"User Identifier", nil), self.userIdentifier]];
+    NSString * appBuildString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    NSString * appVersionString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    [meta appendString:[NSString stringWithFormat:@"%@: %@\n", NSLocalizedString(@"App Version", nil), [NSString stringWithFormat:@"%@ (build %@)", appVersionString, appBuildString]]];
     [meta appendString:[NSString stringWithFormat:@"%@: %@\n", NSLocalizedString(@"Device", nil), [GBDeviceInfo deviceInfo].modelString]];
     [meta appendString:[NSString stringWithFormat:@"%@: %@\n", NSLocalizedString(@"iOS Version", nil), [NSString stringWithFormat:@"%lu.%lu.%lu", (unsigned long)[GBDeviceInfo deviceInfo].osVersion.major, (unsigned long)[GBDeviceInfo deviceInfo].osVersion.minor, (unsigned long)[GBDeviceInfo deviceInfo].osVersion.patch]]];
     [meta appendString:[NSString stringWithFormat:@"%@: %@\n", NSLocalizedString(@"Jailbroken", nil), [GBDeviceInfo deviceInfo].isJailbroken ? NSLocalizedString(@"Yes", nil) : NSLocalizedString(@"No", nil)]];
@@ -187,12 +203,26 @@ static bool isFirstAccess = YES;
     }
 
     [meta appendString:[NSString stringWithFormat:@"%@: %@\n", NSLocalizedString(@"Battery", nil), [NSString stringWithFormat:@"%d%% (%@)", batinfo, batteryStatus]]];
-    
+    CTTelephonyNetworkInfo *netinfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *carrier = [netinfo subscriberCellularProvider];
+    [meta appendString:[NSString stringWithFormat:@"%@: %@\n", NSLocalizedString(@"Carrier", nil), [carrier carrierName]]];
+
+    [meta appendString:[NSString stringWithFormat:@"%@: %@\n", NSLocalizedString(@"WiFi", nil), [[self fetchSSIDInfo] objectForKey:@"SSID"]]];
+
     [meta appendString:[NSString stringWithFormat:@"\n=================== %@ ===================\n", NSLocalizedString(@"-", nil)]];
     
     return meta;
 }
 
+- (id)fetchSSIDInfo {
+    NSArray *ifs = (__bridge_transfer NSArray *)CNCopySupportedInterfaces();
+    NSDictionary *info;
+    for (NSString *ifnam in ifs) {
+        info = (__bridge_transfer NSDictionary *)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
+        if (info && [info count]) { break; }
+    }
+    return info;
+}
 
 + (UIImage *)screenshot {
     CGSize imageSize = CGSizeZero;

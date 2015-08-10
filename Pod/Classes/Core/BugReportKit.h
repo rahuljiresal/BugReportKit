@@ -15,6 +15,7 @@
 @interface BugReportKit : NSObject
 
 + (void)initializeWithReporter:(id<BRKReporterDelegate>)reporter delegate:(id<BugReportKitDelegate>)bugReportKitDelegate;
++ (void)setUniqueUserIdentifier:(NSString*)userIdentifier;
 
 @end
 

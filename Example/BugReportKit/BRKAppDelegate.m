@@ -79,6 +79,7 @@
 //                                                                      imageUploader:uploader];
 
     [BugReportKit initializeWithReporter:reporter delegate:self];
+    [BugReportKit setUniqueUserIdentifier:@"rahul.jiresal@gmail.com"];
     
     return YES;
 }
