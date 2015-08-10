@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
     s.version          = '0.1.2'
     s.summary          = 'Easier bug reports on iOS.'
     s.description      = <<-DESC
-                       Easier bug reports on iOS. Just take a screenshot in your app, doodle on the image, and send it away! The report will also include device metadata. Currently, Bug reports can be added to Github Issues, JIRA issues, Gitlab Issues, or sent as emails.
+                       Easier bug reports on iOS. Just take a screenshot in your app, doodle on the image, and send it away! The report will contain device metadata including device model, iOS version, jailbreak status, and memory, disk and battery usage status. Currently, Bug reports can be added to Github Issues, JIRA issues, Gitlab Issues, or sent as emails.
 
                        For more details, check out the Github repo -- https://github.com/rahuljiresal/BugReportKit
                        DESC
