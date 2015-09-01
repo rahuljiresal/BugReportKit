@@ -25,7 +25,8 @@
 @interface BRKViewController ()
 
 @property (strong, nonatomic) UIScrollView* scrollView;
-@property (strong, nonatomic) UIToolbar* toolbar;
+@property (strong, nonatomic) UIToolbar* bottomToolbar;
+@property (strong, nonatomic) UIToolbar* topToolbar;
 @property (strong, nonatomic) UIBarButtonItem* colorPickerButton;
 @property (strong, nonatomic) UIButton* colorPickerButtonView;
 @property (strong, nonatomic) UIBarButtonItem* nextButton;
@@ -77,16 +78,26 @@
 }
 
 - (void)setupSubviews {
-    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - TOOLBAR_HEIGHT)];
+    UIBarButtonItem *spacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+
+    self.topToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, TOOLBAR_HEIGHT)];
+    UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, TOOLBAR_HEIGHT)];
+    [label setTextAlignment:NSTextAlignmentCenter];
+    [label setFont:[UIFont fontWithName:@"AvenirNext-Regular" size:18.0]];
+    [label setText:@"BugReportKit"];
+    UIBarButtonItem* nameItem = [[UIBarButtonItem alloc] initWithCustomView:label];
+    [self.topToolbar setItems:[NSArray arrayWithObjects:spacer, nameItem, spacer, nil]];
+    [self.view addSubview:self.topToolbar];
+    
+    self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, TOOLBAR_HEIGHT, self.view.frame.size.width, self.view.frame.size.height - TOOLBAR_HEIGHT * 2)];
     self.scrollView.pagingEnabled = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.showsVerticalScrollIndicator = NO;
     self.scrollView.scrollEnabled = NO;
     self.scrollView.backgroundColor = [UIColor whiteColor];
     
-    self.toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - TOOLBAR_HEIGHT, self.view.frame.size.width, TOOLBAR_HEIGHT)];
+    self.bottomToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - TOOLBAR_HEIGHT, self.view.frame.size.width, TOOLBAR_HEIGHT)];
     self.cancelButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Cancel", nil) style:UIBarButtonItemStylePlain target:self action:@selector(cancelled:)];
-    UIBarButtonItem *spacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
     self.colorPickerButtonView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, COLORPICKER_RADIUS, COLORPICKER_RADIUS)];
     self.colorPickerButtonView.layer.cornerRadius = COLORPICKER_RADIUS / 2;
@@ -97,10 +108,11 @@
     [self.colorPickerButtonView addTarget:self action:@selector(pickColor:) forControlEvents:UIControlEventTouchUpInside];
 
     self.nextButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Next", nil) style:UIBarButtonItemStylePlain target:self action:@selector(nextButtonPressed:)];
-    [self.toolbar setItems:[NSArray arrayWithObjects:self.cancelButton, spacer, self.colorPickerButton, spacer, self.nextButton, nil] animated:YES];
+    [self.bottomToolbar setItems:[NSArray arrayWithObjects:self.cancelButton, spacer, self.colorPickerButton, spacer, self.nextButton, nil] animated:YES];
     
     self.imageview = [[BRKDrawView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - TOOLBAR_HEIGHT)];
     [self.imageview setStrokeColor:[UIColor redColor]];
+    [self.imageview setContentMode:UIViewContentModeScaleAspectFit];
     [self.imageview setImage:self.screenshot];
     
     self.textView = [[UIPlaceholderTextView alloc] initWithFrame:CGRectMake(self.view.frame.size.width + TEXTVIEW_MARGIN, TEXTVIEW_MARGIN, self.view.frame.size.width - TEXTVIEW_MARGIN * 2, self.scrollView.frame.size.height - TOOLBAR_HEIGHT - TEXTVIEW_MARGIN)];
@@ -114,10 +126,10 @@
     [self.scrollView addSubview:self.imageview];
     [self.scrollView addSubview:self.textView];
     
-    [self.view addSubview:self.toolbar];
+    [self.view addSubview:self.bottomToolbar];
     [self.view addSubview:self.scrollView];
     
-    [self.view bringSubviewToFront:self.toolbar];
+    [self.view bringSubviewToFront:self.bottomToolbar];
     
     self.currentPage = 0;
     
@@ -138,13 +150,13 @@
         CGRect textviewFrame = self.textView.frame;
         textviewFrame.size.height = self.scrollView.frame.size.height - TOOLBAR_HEIGHT - TEXTVIEW_MARGIN - keyboardHeight;
         [self.textView setFrame:textviewFrame];
-       [self.toolbar setFrame:CGRectMake(0, self.view.frame.size.height - TOOLBAR_HEIGHT - keyboardHeight, self.view.frame.size.width, TOOLBAR_HEIGHT)];
+       [self.bottomToolbar setFrame:CGRectMake(0, self.view.frame.size.height - TOOLBAR_HEIGHT - keyboardHeight, self.view.frame.size.width, TOOLBAR_HEIGHT)];
     }
 }
 
 - (void)keyboardDidHide: (NSNotification *) notification{
     [self.textView setFrame:CGRectMake(self.view.frame.size.width + TEXTVIEW_MARGIN, TEXTVIEW_MARGIN, self.view.frame.size.width - TEXTVIEW_MARGIN * 2, self.scrollView.frame.size.height - TOOLBAR_HEIGHT - TEXTVIEW_MARGIN)];
-    [self.toolbar setFrame:CGRectMake(0, self.view.frame.size.height - TOOLBAR_HEIGHT, self.view.frame.size.width, TOOLBAR_HEIGHT)];
+    [self.bottomToolbar setFrame:CGRectMake(0, self.view.frame.size.height - TOOLBAR_HEIGHT, self.view.frame.size.width, TOOLBAR_HEIGHT)];
 }
 
 - (void)dealloc {
