@@ -51,10 +51,10 @@
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:githubUrlString]];
         [request setHTTPMethod:@"POST"];
         
-        NSString* titleText = [text substringToIndex:MIN(text.length, 10)];
-        NSString* bodyText = [NSString stringWithFormat:@"%@\n\n\nPlease see attached screenshot --!\n\n![Attached Screenshot](%@)", text, absoluteUrl];
+        NSString* titleText = [text substringToIndex:MIN(text.length, 25)];
+        NSString* bodyText = [NSString stringWithFormat:@"%@\n\n\nIssue reported using BugReportKit. Please see attached screenshot --!\n\n![Attached Screenshot](%@)", text, absoluteUrl];
         NSDictionary *bodyDict = @{
-                                   @"title"     : [NSString stringWithFormat:@"BugReportKit Issue: %@...",  titleText],
+                                   @"title"     : [NSString stringWithFormat:@"%@...",  titleText],
                                    @"body"      : bodyText,
                                    @"assignee"  : self.username
                                    };

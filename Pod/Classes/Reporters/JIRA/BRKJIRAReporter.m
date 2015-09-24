@@ -51,14 +51,14 @@
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:jiraUrlString]];
         [request setHTTPMethod:@"POST"];
         
-        NSString* summaryText = [text substringToIndex:MIN(text.length, 10)];
-        NSString* description = [NSString stringWithFormat:@"%@\n\nPlease see attached screenshot.\n\n!%@!", text, absoluteUrl];
+        NSString* summaryText = [text substringToIndex:MIN(text.length, 25)];
+        NSString* description = [NSString stringWithFormat:@"%@\n\nIssue reported using BugReportKit. Please see attached screenshot.\n\n!%@!", text, absoluteUrl];
         NSDictionary *bodyDict = @{
                                    @"fields" : @{
                                        @"project"   : @{
                                                @"key" : self.projectKey
                                                },
-                                       @"summary"     : [NSString stringWithFormat:@"BugReportKit Issue: %@...",  summaryText],
+                                       @"summary"     : [NSString stringWithFormat:@"%@...",  summaryText],
                                        @"description"      : description,
                                        @"issuetype"  : @{
                                                @"name" : @"Bug"
