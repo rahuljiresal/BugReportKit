@@ -110,7 +110,7 @@
     self.nextButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Next", nil) style:UIBarButtonItemStylePlain target:self action:@selector(nextButtonPressed:)];
     [self.bottomToolbar setItems:[NSArray arrayWithObjects:self.cancelButton, spacer, self.colorPickerButton, spacer, self.nextButton, nil] animated:YES];
     
-    self.imageview = [[BRKDrawView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - TOOLBAR_HEIGHT)];
+    self.imageview = [[BRKDrawView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - TOOLBAR_HEIGHT * 2)];
     [self.imageview setStrokeColor:[UIColor redColor]];
     [self.imageview setContentMode:UIViewContentModeScaleAspectFit];
     [self.imageview setImage:self.screenshot];

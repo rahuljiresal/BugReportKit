@@ -34,12 +34,24 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z01-4N-lch">
+                                <rect key="frame" x="0.0" y="551" width="600" height="49"/>
+                                <animations/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <items>
+                                    <tabBarItem systemItem="favorites" id="btU-63-hZe"/>
+                                    <tabBarItem systemItem="more" id="iYT-Jp-Z6i"/>
+                                </items>
+                            </tabBar>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Mvr-aV-6Um" firstAttribute="top" secondItem="Z01-4N-lch" secondAttribute="bottom" id="0M8-62-s0t"/>
                             <constraint firstItem="CfJ-Hc-RhZ" firstAttribute="trailing" secondItem="TpU-gO-2f1" secondAttribute="trailingMargin" id="2zV-2r-8Fe"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Z01-4N-lch" secondAttribute="trailing" constant="-20" id="4cs-Gz-N90"/>
                             <constraint firstItem="CfJ-Hc-RhZ" firstAttribute="centerX" secondItem="TpU-gO-2f1" secondAttribute="centerX" id="Sgg-GZ-A8b"/>
+                            <constraint firstItem="Z01-4N-lch" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leadingMargin" constant="-20" id="Vg5-bo-Qc3"/>
                             <constraint firstAttribute="centerX" secondItem="tbI-tT-uS9" secondAttribute="centerX" id="Xx6-dB-txa"/>
                             <constraint firstItem="CfJ-Hc-RhZ" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leadingMargin" id="jUz-a2-jHz"/>
                             <constraint firstItem="CfJ-Hc-RhZ" firstAttribute="top" secondItem="tbI-tT-uS9" secondAttribute="bottom" constant="8" id="pA9-Nb-2Jb"/>

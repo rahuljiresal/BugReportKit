@@ -124,9 +124,11 @@ static bool isFirstAccess = YES;
 
 + (void)enable {
     BugReportKit* instance = [BugReportKit sharedInstance];
-    [[NSNotificationCenter defaultCenter] removeObserver:instance];
-    [[NSNotificationCenter defaultCenter] addObserver:instance selector:@selector(screenshotDetectedNotification:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
-    instance.isEnabled = YES;
+    if (instance.brkReporter) {
+        [[NSNotificationCenter defaultCenter] removeObserver:instance];
+        [[NSNotificationCenter defaultCenter] addObserver:instance selector:@selector(screenshotDetectedNotification:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
+        instance.isEnabled = YES;
+    }
 }
 
 + (void)disable {
