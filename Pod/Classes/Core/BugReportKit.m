@@ -120,6 +120,17 @@ static bool isFirstAccess = YES;
     instance.userIdentifier = userIdentifier;
 }
 
++ (void)enable {
+    BugReportKit* instance = [BugReportKit sharedInstance];
+    [[NSNotificationCenter defaultCenter] removeObserver:instance];
+    [[NSNotificationCenter defaultCenter] addObserver:instance selector:@selector(screenshotDetectedNotification:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
+}
+
++ (void)disable {
+    BugReportKit* instance = [BugReportKit sharedInstance];
+    [[NSNotificationCenter defaultCenter] removeObserver:instance];
+}
+
 - (void)screenshotDetectedNotification:(id)notification {
     UIImage* screenshot = [BugReportKit screenshot];
     [[NSNotificationCenter defaultCenter] removeObserver:self];

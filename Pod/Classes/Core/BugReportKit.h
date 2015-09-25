@@ -16,6 +16,8 @@
 
 + (void)initializeWithReporter:(id<BRKReporterDelegate>)reporter delegate:(id<BugReportKitDelegate>)bugReportKitDelegate;
 + (void)setUniqueUserIdentifier:(NSString*)userIdentifier;
++ (void)enable;
++ (void)disable;
 
 @end
 
