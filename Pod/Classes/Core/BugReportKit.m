@@ -129,6 +129,7 @@ static bool isFirstAccess = YES;
     [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
 
     self.originalWindow = [[UIApplication sharedApplication] keyWindow];
+    [self.originalWindow endEditing:YES];
     
     for (UIWindow* window in [[UIApplication sharedApplication] windows]) {
         if ([window isKindOfClass:[BRKWindow class]]) {
