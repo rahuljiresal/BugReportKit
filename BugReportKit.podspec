@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
     s.name             = 'BugReportKit'
-    s.version          = '0.1.7'
+    s.version          = '0.1.8'
     s.summary          = 'Easier bug reports on iOS.'
     s.description      = <<-DESC
                        Easier bug reports on iOS. Just take a screenshot in your app, doodle on the image, and send it away! The report will contain device metadata including device model, iOS version, jailbreak status, memory, disk and battery usage status, carrier and WiFi names and a unique user identifier (if set by developer). Currently, Bug reports can be added to Github Issues, JIRA issues, Gitlab Issues, or sent as emails.

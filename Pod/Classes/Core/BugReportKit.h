@@ -18,6 +18,7 @@
 + (void)setUniqueUserIdentifier:(NSString*)userIdentifier;
 + (void)enable;
 + (void)disable;
++ (BOOL)isEnabled;
 
 @end
 

@@ -47,6 +47,7 @@ vm_size_t freeMemory(void) {
 @property (strong, nonatomic) id<BugReportKitDelegate> bugReportKitDelegate;
 
 @property (strong, nonatomic) NSString* userIdentifier;
+@property BOOL isEnabled;
 
 @end
 
@@ -113,6 +114,7 @@ static bool isFirstAccess = YES;
     instance.brkReporter = reporter;
     instance.bugReportKitDelegate = bugReportKitDelegate;
     [[NSNotificationCenter defaultCenter] addObserver:instance selector:@selector(screenshotDetectedNotification:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
+    instance.isEnabled = YES;
 }
 
 + (void)setUniqueUserIdentifier:(NSString*)userIdentifier {
@@ -124,11 +126,18 @@ static bool isFirstAccess = YES;
     BugReportKit* instance = [BugReportKit sharedInstance];
     [[NSNotificationCenter defaultCenter] removeObserver:instance];
     [[NSNotificationCenter defaultCenter] addObserver:instance selector:@selector(screenshotDetectedNotification:) name:UIApplicationUserDidTakeScreenshotNotification object:nil];
+    instance.isEnabled = YES;
 }
 
 + (void)disable {
     BugReportKit* instance = [BugReportKit sharedInstance];
     [[NSNotificationCenter defaultCenter] removeObserver:instance];
+    instance.isEnabled = NO;
+}
+
++ (BOOL)isEnabled {
+    BugReportKit* instance = [BugReportKit sharedInstance];
+    return [instance isEnabled];
 }
 
 - (void)screenshotDetectedNotification:(id)notification {
