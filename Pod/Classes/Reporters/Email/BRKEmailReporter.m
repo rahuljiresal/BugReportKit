@@ -64,7 +64,7 @@
     }
 }
 
-- (void)sendBugReportWithImage:(UIImage*)image text:(NSString *)text completionHandler:(void (^)(NSError *))handler {
+- (void)sendBugReportWithImage:(UIImage*)image text:(NSString *)text completionHandler:(void (^)(NSError *, NSString *url))handler {
     MCOMessageBuilder * builder = [[MCOMessageBuilder alloc] init];
     [[builder header] setFrom:[MCOAddress addressWithDisplayName:@"BugReportKit" mailbox:self.username]];
     NSMutableArray *to = [[NSMutableArray alloc] init];
@@ -91,9 +91,9 @@
     MCOSMTPSendOperation *sendOperation = [self.smtpSession sendOperationWithData:rfc822Data];
     [sendOperation start:^(NSError *error) {
         if(error) {
-            handler(error);
+            handler(error, nil);
         } else {
-            handler(nil);
+            handler(nil, nil);
         }
     }];
     

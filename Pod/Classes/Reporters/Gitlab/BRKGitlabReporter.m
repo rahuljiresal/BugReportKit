@@ -37,12 +37,12 @@
     return self;
 }
 
-- (void)sendBugReportWithImage:(UIImage*)image text:(NSString *)text completionHandler:(void (^)(NSError *))handler {
+- (void)sendBugReportWithImage:(UIImage*)image text:(NSString *)text completionHandler:(void (^)(NSError *error, NSString* url))handler {
     NSAssert([self.imageUploader respondsToSelector:@selector(uploadImage:completionHandler:)], @"Error: Invalid instance of BRKImageUploaderDelegate");
     
     [self.imageUploader uploadImage:image completionHandler:^(NSString *absoluteUrl, NSError *error) {
         if (error) {
-            handler(error);
+            handler(error, nil);
             return ;
         }
         
@@ -62,7 +62,7 @@
         NSData *sessionJsonData = [NSJSONSerialization dataWithJSONObject:sessionRequestBody options:0 error:&sessionJsonError];
         
         if (!sessionJsonData) {
-            handler(sessionJsonError);
+            handler(sessionJsonError, nil);
         }
         else {
             [sessionRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -72,7 +72,7 @@
             NSURLSessionTask* sessionTask = [session dataTaskWithRequest:sessionRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                 
                 if (error) {
-                    handler(error);
+                    handler(error, nil);
                     return;
                 }
                 
@@ -86,7 +86,9 @@
                 NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:gitlabUrlString]];
                 [request setHTTPMethod:@"POST"];
                 
-                NSString* titleText = [text substringToIndex:MIN(text.length, 25)];
+                NSRange range = [text rangeOfString:@"\n"];
+                NSInteger min = range.location;
+                NSString* titleText = [[text substringToIndex:MIN(text.length, min)] stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
                 NSString* bodyText = [NSString stringWithFormat:@"%@\n\n\nIssue reported using BugReportKit. Please see attached screenshot --!\n\n[Attached Screenshot](%@)", text, absoluteUrl];
                 NSDictionary *bodyDict = @{
                                            @"title"         : [NSString stringWithFormat:@"%@...",  titleText],
@@ -100,7 +102,7 @@
                                                                      error:&jsonError];
                 
                 if (!jsonData) {
-                    handler(error);
+                    handler(error, nil);
                     return;
                 } else {
                     [request setValue:privateToken forHTTPHeaderField:@"PRIVATE-TOKEN"];
@@ -109,7 +111,7 @@
                     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
                     
                     NSURLSessionTask* task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                        handler(error);
+                        handler(error, nil);
                         
                     }];
                     [task resume];

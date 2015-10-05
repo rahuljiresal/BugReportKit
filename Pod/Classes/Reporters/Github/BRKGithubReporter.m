@@ -37,12 +37,12 @@
     return self;
 }
 
-- (void)sendBugReportWithImage:(UIImage*)image text:(NSString *)text completionHandler:(void (^)(NSError *))handler {
+- (void)sendBugReportWithImage:(UIImage*)image text:(NSString *)text completionHandler:(void (^)(NSError *, NSString* url))handler {
     NSAssert([self.imageUploader respondsToSelector:@selector(uploadImage:completionHandler:)], @"Error: Invalid instance of BRKImageUploaderDelegate");
     
     [self.imageUploader uploadImage:image completionHandler:^(NSString *absoluteUrl, NSError *error) {
         if (error) {
-            handler(error);
+            handler(error, nil);
             return ;
         }
         
@@ -51,7 +51,9 @@
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:githubUrlString]];
         [request setHTTPMethod:@"POST"];
         
-        NSString* titleText = [text substringToIndex:MIN(text.length, 25)];
+        NSRange range = [text rangeOfString:@"\n"];
+        NSInteger min = range.location;
+        NSString* titleText = [[text substringToIndex:MIN(text.length, min)] stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
         NSString* bodyText = [NSString stringWithFormat:@"%@\n\n\nIssue reported using BugReportKit. Please see attached screenshot --!\n\n![Attached Screenshot](%@)", text, absoluteUrl];
         NSDictionary *bodyDict = @{
                                    @"title"     : [NSString stringWithFormat:@"%@...",  titleText],
@@ -65,7 +67,7 @@
                                                              error:&jsonError];
         
         if (!jsonData) {
-            handler(error);
+            handler(error, nil);
             return;
         } else {
             NSString *authStr = [NSString stringWithFormat:@"%@:%@", self.username, self.password];
@@ -81,7 +83,7 @@
 
             NSLog(@"%@", request);
             NSURLSessionTask* task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                handler(error);
+                handler(error, nil);
                 
             }];
             [task resume];

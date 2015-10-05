@@ -37,12 +37,12 @@
     return self;
 }
 
-- (void)sendBugReportWithImage:(UIImage*)image text:(NSString *)text completionHandler:(void (^)(NSError *))handler {
+- (void)sendBugReportWithImage:(UIImage*)image text:(NSString *)text completionHandler:(void (^)(NSError *, NSString* url))handler {
     NSAssert([self.imageUploader respondsToSelector:@selector(uploadImage:completionHandler:)], @"Error: Invalid instance of BRKImageUploaderDelegate");
     
     [self.imageUploader uploadImage:image completionHandler:^(NSString *absoluteUrl, NSError *error) {
         if (error) {
-            handler(error);
+            handler(error, nil);
             return ;
         }
         
@@ -51,7 +51,9 @@
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:jiraUrlString]];
         [request setHTTPMethod:@"POST"];
         
-        NSString* summaryText = [text substringToIndex:MIN(text.length, 25)];
+        NSRange range = [text rangeOfString:@"\n"];
+        NSInteger min = range.location;
+        NSString* summaryText = [[text substringToIndex:MIN(text.length, min)] stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
         NSString* description = [NSString stringWithFormat:@"%@\n\nIssue reported using BugReportKit. Please see attached screenshot.\n\n!%@!", text, absoluteUrl];
         NSDictionary *bodyDict = @{
                                    @"fields" : @{
@@ -72,7 +74,7 @@
                                                              error:&jsonError];
         
         if (!jsonData) {
-            handler(error);
+            handler(error, nil);
             return;
         } else {
             NSString *authStr = [NSString stringWithFormat:@"%@:%@", self.username, self.password];
@@ -87,8 +89,13 @@
             NSURLSession* session = [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:nil];
             
             NSURLSessionTask* task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                handler(error);
-                
+                NSDictionary* responseDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+                if (error) {
+                    handler(error, nil);
+                }
+                else {
+                    handler(error, [NSString stringWithFormat:@"https://%@/browse/%@", self.projectKey, [responseDict objectForKey:@"key"]]);
+                }
             }];
             [task resume];
         }

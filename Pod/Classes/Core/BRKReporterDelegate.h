@@ -10,6 +10,6 @@
 
 @protocol BRKReporterDelegate <NSObject>
 
-- (void)sendBugReportWithImage:(UIImage*)image text:(NSString*)text completionHandler:(void(^)(NSError* error))handler;
+- (void)sendBugReportWithImage:(UIImage*)image text:(NSString*)text completionHandler:(void(^)(NSError* error, NSString* url))handler;
 
 @end

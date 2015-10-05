@@ -219,7 +219,7 @@
         [self.textView resignFirstResponder];
         if ([self.parentWindow.brkReporterDelegate respondsToSelector:@selector(sendBugReportWithImage:text:completionHandler:)]) {
             [BRKLoadingView show];
-            [self.parentWindow.brkReporterDelegate sendBugReportWithImage:self.imageview.image text:[self.textView.text stringByAppendingString:self.metaInfo] completionHandler:^(NSError *error) {
+            [self.parentWindow.brkReporterDelegate sendBugReportWithImage:self.imageview.image text:[self.textView.text stringByAppendingString:self.metaInfo] completionHandler:^(NSError *error, NSString* url) {
                 [BRKLoadingView dismiss];
                 if (error) {
                     [self showAlertWithTitle:NSLocalizedString(@"Error", nil) message:error.localizedDescription handler:^(UIAlertAction *action) {
@@ -229,9 +229,11 @@
                     }];
                 }
                 else {
-                    if ([self.parentWindow.brkWindowDelegate respondsToSelector:@selector(bugReportSent)]) {
-                        [self.parentWindow.brkWindowDelegate bugReportSent];
-                    }
+                    [self showAlertWithTitle:NSLocalizedString(@"Sent", nil) message:[NSString stringWithFormat:NSLocalizedString(@"Your report was sent. %@", nil), url] handler:^(UIAlertAction *action) {
+                        if ([self.parentWindow.brkWindowDelegate respondsToSelector:@selector(bugReportSent)]) {
+                            [self.parentWindow.brkWindowDelegate bugReportSent];
+                        }
+                    }];
                 }
             }];
         }
