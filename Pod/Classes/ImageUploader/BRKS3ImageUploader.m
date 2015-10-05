@@ -29,7 +29,7 @@ typedef void (^Handler)(NSString *, NSError *);
         self.bucketName = bucketName;
         AWSStaticCredentialsProvider *cp = [[AWSStaticCredentialsProvider alloc] initWithAccessKey:accesskey secretKey:secretKey];
         AWSServiceConfiguration* config = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1 credentialsProvider:cp];
-        AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = config;
+        [AWSS3TransferManager registerS3TransferManagerWithConfiguration:config forKey:@"BugReportKitS3Uploader"];
     }
     return self;
 }
@@ -53,7 +53,7 @@ typedef void (^Handler)(NSString *, NSError *);
     uploadRequest.ACL = AWSS3ObjectCannedACLPublicRead;
     uploadRequest.contentType = @"image/png";
     
-    AWSS3TransferManager* tm = [AWSS3TransferManager defaultS3TransferManager];
+    AWSS3TransferManager* tm = [AWSS3TransferManager S3TransferManagerForKey:@"BugReportKitS3Uploader"];
     [[tm upload:uploadRequest] continueWithBlock:^id(AWSTask *task) {
         if (task.error) {
             NSLog(@"Error: %@", task.error.localizedDescription);
