@@ -23,16 +23,19 @@ typedef void (^Handler)(NSString *, NSError *);
 @implementation BRKS3ImageUploader
 
 
-- (id)initWithS3AccessKey:(NSString*)accesskey secretKey:(NSString*)secretKey bucketName:(NSString*)bucketName {
+- (id)initWithS3AccessKey:(NSString*)accesskey secretKey:(NSString*)secretKey bucketName:(NSString*)bucketName AWSRegion:(AWSRegionType)AWSRegion{
     self = [self init];
     if (self) {
         self.bucketName = bucketName;
         AWSStaticCredentialsProvider *cp = [[AWSStaticCredentialsProvider alloc] initWithAccessKey:accesskey secretKey:secretKey];
-        AWSServiceConfiguration* config = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1 credentialsProvider:cp];
+        AWSServiceConfiguration* config = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegion credentialsProvider:cp];
         [AWSS3TransferManager registerS3TransferManagerWithConfiguration:config forKey:@"BugReportKitS3Uploader"];
     }
     return self;
 }
+
+
+
 
 - (void)uploadImage:(UIImage *)image completionHandler:(void (^)(NSString *, NSError *))handler {
     

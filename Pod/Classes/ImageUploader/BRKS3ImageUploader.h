@@ -13,6 +13,7 @@
 
 @interface BRKS3ImageUploader : NSObject <BRKImageUploaderDelegate>
 
-- (id)initWithS3AccessKey:(NSString*)accesskey secretKey:(NSString*)secretKey bucketName:(NSString*)bucketName;
+
+- (id)initWithS3AccessKey:(NSString*)accesskey secretKey:(NSString*)secretKey bucketName:(NSString*)bucketName AWSRegion:(AWSRegionType)AWSRegion;
 
 @end
