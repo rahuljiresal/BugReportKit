@@ -55,11 +55,18 @@
 //                                                                   password:EMAIL_PASSWORD
 //                                                             connectionType:BRKEmailConnectionTypeClear
 //                                                                  toAddress:EMAIL_TO];
-
+    
+//    BRKS3ImageUploader* uploader = [[BRKS3ImageUploader alloc] initWithS3AccessKey:S3_ACCESSKEY
+//                                                                         secretKey:S3_SECRETKEY
+//                                                                        bucketName:S3_BUCKET];
+    
+    
     BRKS3ImageUploader* uploader = [[BRKS3ImageUploader alloc] initWithS3AccessKey:S3_ACCESSKEY
                                                                          secretKey:S3_SECRETKEY
-                                                                        bucketName:S3_BUCKET];
+                                                                        bucketName:S3_BUCKET
+                                                                         AWSRegion:AWSRegionUSWest2];
 
+                                    
 //    BRKJIRAReporter* reporter = [[BRKJIRAReporter alloc] initWithJIRABaseURL:JIRA_URL
 //                                                                    username:JIRA_USERNAME
 //                                                                    password:JIRA_PASSWORD
@@ -71,6 +78,8 @@
                                                                          repository:GITHUB_REPO
                                                                               owner:GITHUB_OWNER
                                                                       imageUploader:uploader];
+    
+    
 
 //    BRKGitlabReporter* reporter = [[BRKGitlabReporter alloc] initWithGitlabUsername:GITLAB_USERNAME
 //                                                                           password:GITLAB_PASSWORD

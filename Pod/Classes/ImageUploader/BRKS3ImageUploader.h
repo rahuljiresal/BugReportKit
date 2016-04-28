@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AWSS3/AWSS3.h>
+#import "AWSServiceEnum.h"
 
 #import "BRKImageUploaderDelegate.h"
 
@@ -15,4 +16,24 @@
 
 - (id)initWithS3AccessKey:(NSString*)accesskey secretKey:(NSString*)secretKey bucketName:(NSString*)bucketName;
 
+//typedef NS_ENUM(NSInteger, BRKS3AWSRegionType) {
+//    AWSRegionUnknown,
+//    AWSRegionUSEast1,
+//    AWSRegionUSWest1,
+//    AWSRegionUSWest2,
+//    AWSRegionEUWest1,
+//    AWSRegionEUCentral1,
+//    AWSRegionAPSoutheast1,
+//    AWSRegionAPNortheast1,
+//    AWSRegionAPSoutheast2,
+//    AWSRegionSAEast1,
+//    AWSRegionCNNorth1,
+//    AWSRegionUSGovWest1,
+//};
+
+- (id)initWithS3AccessKey:(NSString*)accesskey secretKey:(NSString*)secretKey bucketName:(NSString*)bucketName AWSRegion:(AWSRegionType)AWSRegion;
+
 @end
+
+
+
